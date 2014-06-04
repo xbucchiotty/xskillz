@@ -40,6 +40,10 @@ public class XebianRepository {
         return from(xebians).filter(predicate).toList();
     }
 
+    public Collection<Xebian> allXebians() {
+        return xebians("");
+    }
+
     @GET
     @Produces(APPLICATION_JSON)
     @Path("/{id}")
