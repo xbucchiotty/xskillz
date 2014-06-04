@@ -19,14 +19,23 @@ angular.module('myApp.controllers', [])
         var promise = $auth.getAuth();
         promise.then(function (response) {
             email = response.data;
+
+            $http.get('api/xebian/'+email, function(data) {
+                $scope.skills = data;
+            });
         });
 
-        $scope.skills = ["Angular", "Java", "dsfds"];
+        $scope.skills = [];
 
         $scope.newSkill = "";
         $scope.addSkill = function() {
             if (_.indexOf($scope.skills, $scope.newSkill) === -1) {
-                $scope.skills.push($scope.newSkill);
+                $http.put('api/xebian/'+email, $scope.newSkill, function() {
+                });
+
+                $http.get('api/xebian/'+email, function(data) {
+                    $scope.skills = data;
+                });
             }
         }
     }]);
