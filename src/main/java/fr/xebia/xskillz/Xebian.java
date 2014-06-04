@@ -1,8 +1,13 @@
 package fr.xebia.xskillz;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Xebian {
 
-    public XebiaId id;
+    private XebiaId id;
+
+    private Set<Skill> skills = new HashSet<>();
 
     public Xebian(String xebiaId) {
         this.id = new XebiaId(xebiaId);
@@ -17,6 +22,14 @@ public class Xebian {
 
     public void setId(XebiaId id) {
         this.id = id;
+    }
+
+    public Set<Skill> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(Set<Skill> skills) {
+        this.skills = skills;
     }
 
     @Override
