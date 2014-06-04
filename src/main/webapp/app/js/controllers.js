@@ -14,15 +14,19 @@ angular.module('myApp.controllers', [])
             });
         }
     }])
-    .controller('ProfileCtrl', ['$scope', '$http', function($scope, $http) {
+    .controller('ProfileCtrl', ['$scope', '$http', '$auth', function($scope, $http, $auth) {
         var email = "";
         var promise = $auth.getAuth();
         promise.then(function (response) {
             email = response.data;
         });
 
-        $scope.tags = ["Angular", "Java"];
+        $scope.skills = ["Angular", "Java", "dsfds"];
 
-        $scope.addTag = function() {
+        $scope.newSkill = "";
+        $scope.addSkill = function() {
+            if (_.indexOf($scope.skills, $scope.newSkill) === -1) {
+                $scope.skills.push($scope.newSkill);
+            }
         }
     }]);

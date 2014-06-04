@@ -2,21 +2,28 @@
     <div class="row">
         <div class="col-sm-6 col-sm-offset-3">
 
-            <div class="container">
+            <div class="container-fluid">
                 <div id="search" class="row">
-                    <form  ng-submit="addTag()" class="form-inline" role="form">
-                        <div class="form-group has-success has-feedback">
-                            <label class="control-label" for="tag">Ajouter une compétence:</label>
-                            <input type="text" class="form-control" id="tag" ng-model="query">
-                            <span class="glyphicon glyphicon-plus form-control-feedback" ng-click="search()" placeholder="Angular"></span>
-                        </div>
-                    </form>
+                    <div class="col-md-12">
+                        <form ng-submit="addSkill()" class="form-inline" role="form">
+                            <button type="submit" class="btn btn-primary" ng-click="search()">
+                                <i class="glyphicon glyphicon-plus"></i> Ajoute cette nouvelle compétence:
+                            </button>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="tag" ng-model="newSkill" placeholder="Nouvelle compétence">
+                            </div>
+                        </form>
+                    </div>
                 </div>
                 <div id="tags" class="row">
-                    Tes compétences:
-                    <span ng-repeat="tag in tags">
-
-                    </span>
+                    <div class="col-md-4">
+                        Tes compétences:
+                    </div>
+                    <div class="col-md-8">
+                        <span ng-repeat="skill in skills">
+                            <span class="badge">{{skill}}</span>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
