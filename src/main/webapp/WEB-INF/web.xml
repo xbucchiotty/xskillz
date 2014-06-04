@@ -5,7 +5,7 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
          version="2.4">
 
-    <servlet>
+    <!--<servlet>
         <servlet-name>jersey-services</servlet-name>
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
         <init-param>
@@ -17,11 +17,22 @@
             <param-value>true</param-value>
         </init-param>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>jersey-services</servlet-name>
         <url-pattern>/app/api/*</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>-->
+
+    <listener>
+        <listener-class>fr.xebia.xskillz.GuiceConfig</listener-class>
+    </listener>
+    <filter>
+        <filter-name>Guice Filter</filter-name>
+        <filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>Guice Filter</filter-name>
+        <url-pattern>/app/api/*</url-pattern>
+    </filter-mapping>
 
 
 </web-app>

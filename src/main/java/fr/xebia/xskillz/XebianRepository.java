@@ -2,6 +2,7 @@ package fr.xebia.xskillz;
 
 import com.google.common.base.Function;
 
+import javax.inject.Singleton;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -13,14 +14,20 @@ import static javax.ws.rs.core.Response.Status.NOT_MODIFIED;
 import static javax.ws.rs.core.Response.status;
 
 @Path("/xebian")
+@Singleton
 public class XebianRepository {
 
-    private final static Collection<Xebian> xebians = new HashSet<>();
+    private final Collection<Xebian> xebians = new HashSet<>();
+
+    public XebianRepository() {
+        xebians.add(new Xebian("john@xebia.fr"));
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<Xebian> xebians() {
-        return xebians;
+        return
+                xebians;
     }
 
     @GET

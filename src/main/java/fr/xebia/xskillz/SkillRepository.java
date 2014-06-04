@@ -1,34 +1,44 @@
 package fr.xebia.xskillz;
 
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.base.Splitter;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 import static com.google.common.collect.FluentIterable.from;
 
 @Path("/skill")
+@Singleton
 public class SkillRepository {
 
-    private static final Collection<Skill> skills = new HashSet<>();
+    private final XebianRepository xebiansRepository;
+
+    @Inject
+    public SkillRepository(XebianRepository xebians) {
+        this.xebiansRepository = xebians;
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<Skill> skills() {
-        return skills;
-    }
-
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response put(Skill skill) {
-        return skills.add(skill) ? Response.status(Response.Status.CREATED).build() : Response.status(Response.Status.NOT_MODIFIED).build();
+        return from(xebiansRepository.xebians()).transformAndConcat(new Function<Xebian, Collection<Skill>>() {
+            @Override
+            public Collection<Skill> apply(Xebian xebian) {
+                return xebian.getSkills();
+            }
+        }).toSet();
     }
 
     @POST
@@ -52,7 +62,7 @@ public class SkillRepository {
         }
         Predicate<Skill> skillPredicate = Predicates.or(predicates);
 
-        return from(skills)
+        return from(skills())
                 .filter(skillPredicate)
                 .toList();
     }
