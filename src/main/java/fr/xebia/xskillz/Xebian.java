@@ -1,26 +1,37 @@
 package fr.xebia.xskillz;
 
+import com.google.common.base.Predicate;
+
 import java.util.HashSet;
 import java.util.Set;
 
 public class Xebian {
 
-    private XebiaId id;
+    private XebianId id;
 
     private Set<Skill> skills = new HashSet<>();
 
     public Xebian(String xebiaId) {
-        this.id = new XebiaId(xebiaId);
+        this.id = new XebianId(xebiaId);
     }
 
     public Xebian() {
     }
 
-    public XebiaId getId() {
+    public static Predicate<Xebian> byId(final XebianId id) {
+        return new Predicate<Xebian>() {
+            @Override
+            public boolean apply(Xebian xebian) {
+                return xebian.getId().equals(id);
+            }
+        };
+    }
+
+    public XebianId getId() {
         return id;
     }
 
-    public void setId(XebiaId id) {
+    public void setId(XebianId id) {
         this.id = id;
     }
 
@@ -47,5 +58,9 @@ public class Xebian {
     @Override
     public int hashCode() {
         return id.hashCode();
+    }
+
+    public void addSkill(Skill skill) {
+        skills.add(skill);
     }
 }

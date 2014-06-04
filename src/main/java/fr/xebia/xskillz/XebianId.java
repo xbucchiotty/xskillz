@@ -1,15 +1,15 @@
 package fr.xebia.xskillz;
 
-public class XebiaId {
+public class XebianId {
 
 
     private String email;
 
-    public XebiaId(String email) {
+    public XebianId(String email) {
         this.email = email;
     }
 
-    public XebiaId() {
+    public XebianId() {
     }
 
     public String getEmail() {
@@ -25,9 +25,9 @@ public class XebiaId {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        XebiaId xebiaId = (XebiaId) o;
+        XebianId xebianId = (XebianId) o;
 
-        if (!email.equals(xebiaId.email)) return false;
+        if (!email.equals(xebianId.email)) return false;
 
         return true;
     }
