@@ -7,13 +7,13 @@ angular.module('myApp.controllers', [])
           $scope.query = "Angular";
 
         $scope.search = function() {
-            $http.get('/search/' + $scope.query)
-                .success(function(data, status, headers, config) {
-                    $scope.results = ["Aucun Xebian n'a cette compétence"];
-                })
-                .error(function(data, status, headers, config) {
-                    $scope.results = ["Erreur"];
-                });
+            $http({
+                method : 'POST',
+                url : '/api/search',
+                data : {
+                    search: $scope.query
+                }
+            });
         }
     }])
     .controller('ProfileCtrl', ['$scope', function($scope) {

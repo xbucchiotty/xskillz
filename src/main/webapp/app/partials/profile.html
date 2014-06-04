@@ -1,0 +1,21 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+
+            <div class="container">
+                <div id="search" class="row">
+                    <form  ng-submit="search()" class="form-inline" role="form">
+                        <div class="form-group has-success has-feedback">
+                            <label class="control-label" for="query">Ajouter une compétence:</label>
+                            <input type="text" class="form-control" id="query" ng-model="query">
+                            <span class="glyphicon glyphicon-search form-control-feedback" ng-click="search()"></span>
+                        </div>
+                    </form>
+                </div>
+                <div id="results" class="row">
+                    search result
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
