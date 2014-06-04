@@ -15,26 +15,22 @@ angular.module('myApp.controllers', [])
         }
     }])
     .controller('ProfileCtrl', ['$scope', '$http', '$auth', function($scope, $http, $auth) {
-        var email = "";
+        $scope.email = "";
         var promise = $auth.getAuth();
         promise.then(function (response) {
-            email = response.data;
+            $scope.email = response.data;
 
-            $http.get('api/xebian/'+email, function(data) {
-                $scope.skills = data;
+            $http.get('api/xebian/'+$scope.email).then(function(response) {
+                $scope.skills = response.data.skills;
             });
         });
 
         $scope.skills = [];
-
         $scope.newSkill = "";
         $scope.addSkill = function() {
             if (_.indexOf($scope.skills, $scope.newSkill) === -1) {
-                $http.put('api/xebian/'+email, $scope.newSkill, function() {
-                });
-
-                $http.get('api/xebian/'+email, function(data) {
-                    $scope.skills = data;
+                $http.put('api/xebian/'+$scope.email, $scope.newSkill).then(function(response) {
+                    $scope.skills = response.data.skills;
                 });
             }
         }
