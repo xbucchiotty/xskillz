@@ -9,20 +9,31 @@ public class Xebian {
 
     private XebianId id;
 
+    private String email;
+
     private Set<Skill> skills = new HashSet<>();
 
-    public Xebian(String xebiaId) {
-        this.id = new XebianId(xebiaId);
+    public Xebian() {
     }
 
-    public Xebian() {
+    public Xebian(XebianId newId) {
+        this.id = newId;
+    }
+
+    public Xebian(long id) {
+        this(new XebianId(id));
+    }
+
+    public Xebian(long id, String email) {
+        this(id);
+        this.email = email;
     }
 
     public static Predicate<Xebian> byId(final XebianId id) {
         return new Predicate<Xebian>() {
             @Override
             public boolean apply(Xebian xebian) {
-                return xebian.getId().equals(id);
+                return xebian.getId() == id;
             }
         };
     }
@@ -62,5 +73,17 @@ public class Xebian {
 
     public void addSkill(Skill skill) {
         skills.add(skill);
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public static interface Properties {
+        String EMAIL = "email";
     }
 }

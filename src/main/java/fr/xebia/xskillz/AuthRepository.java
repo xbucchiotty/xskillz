@@ -20,6 +20,6 @@ public class AuthRepository {
 
     @GET
     public String randomAccount() {
-        return from(xebiansRepository.xebians()).first().get().getId().getEmail();
+        return from(xebiansRepository.xebians()).first().get().getEmail();
     }
 }

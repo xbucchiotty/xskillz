@@ -45,7 +45,7 @@ public class GuiceConfig extends GuiceServletContextListener {
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         super.contextInitialized(servletContextEvent);
         try {
-            injector.getProvider(DatabaseService.class).get().startAsync().awaitRunning(10, SECONDS);
+            injector.getInstance(DatabaseService.class).startAsync().awaitRunning(30, SECONDS);
         } catch (TimeoutException e) {
             throw Throwables.propagate(e);
         }

@@ -2,22 +2,21 @@ package fr.xebia.xskillz;
 
 public class XebianId {
 
+    private Long value;
 
-    private String email;
-
-    public XebianId(String email) {
-        this.email = email;
+    public XebianId(long value) {
+        this.value = value;
     }
 
     public XebianId() {
     }
 
-    public String getEmail() {
-        return email;
+    public Long getValue() {
+        return value;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setValue(Long value) {
+        this.value = value;
     }
 
     @Override
@@ -27,13 +26,13 @@ public class XebianId {
 
         XebianId xebianId = (XebianId) o;
 
-        if (!email.equals(xebianId.email)) return false;
+        if (!value.equals(xebianId.value)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return email.hashCode();
+        return value.hashCode();
     }
 }
