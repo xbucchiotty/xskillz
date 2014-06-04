@@ -4,16 +4,19 @@
 
             <div class="container">
                 <div id="search" class="row">
-                    <form  ng-submit="search()" class="form-inline" role="form">
+                    <form  ng-submit="addTag()" class="form-inline" role="form">
                         <div class="form-group has-success has-feedback">
-                            <label class="control-label" for="query">Ajouter une compétence:</label>
-                            <input type="text" class="form-control" id="query" ng-model="query">
-                            <span class="glyphicon glyphicon-search form-control-feedback" ng-click="search()"></span>
+                            <label class="control-label" for="tag">Ajouter une compétence:</label>
+                            <input type="text" class="form-control" id="tag" ng-model="query">
+                            <span class="glyphicon glyphicon-plus form-control-feedback" ng-click="search()" placeholder="Angular"></span>
                         </div>
                     </form>
                 </div>
-                <div id="results" class="row">
-                    search result
+                <div id="tags" class="row">
+                    Tes compétences:
+                    <span ng-repeat="tag in tags">
+
+                    </span>
                 </div>
             </div>
         </div>

@@ -20,7 +20,7 @@
 
     <servlet-mapping>
         <servlet-name>jersey-services</servlet-name>
-        <url-pattern>/api/*</url-pattern>
+        <url-pattern>/app/api/*</url-pattern>
     </servlet-mapping>
 
 

@@ -11,6 +11,9 @@ angular.module('myApp.directives', [])
     }])
     .directive('who', ['$auth', function($auth) {
         return function(scope, elm) {
-            elm.text($auth.email);
+            var promise = $auth.getAuth();
+            promise.then(function (response) {
+                elm.text(response.data);
+            });
         };
     }]);
