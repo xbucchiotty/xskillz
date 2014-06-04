@@ -2,7 +2,7 @@ package fr.xebia.xskillz;
 
 public class Skill {
 
-    public String name;
+    private String name;
 
     public Skill(String name) {
         assert name != null;
@@ -10,6 +10,14 @@ public class Skill {
     }
 
     public Skill() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
