@@ -9,15 +9,18 @@ angular.module('myApp.controllers', [])
         });
 
         $scope.search = function() {
-            /*
             $http({
-                method : 'POST',
-                url : 'api/search',
-                data : {
-                    search: $scope.query
+                method : 'GET',
+                url : 'api/xebian',
+                params : {
+                    "q": $scope.query
                 }
-            });
-            */
+            }).then(function(response) {
+                    $scope.results = [];
+                    _.forEach(response.data, function(xebian) {
+                        $scope.results.push(xebian.id.email);
+                    });
+                });
             /*
             $scope.results = [];
             _.forEach($scope.xebians, function(xebian) {
