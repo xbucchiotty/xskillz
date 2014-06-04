@@ -4,7 +4,12 @@
 
 angular.module('myApp.controllers', [])
     .controller('SearchCtrl', ['$scope', '$http', '$auth', function($scope, $http, $auth) {
+        $http.get('api/xebian').then(function(response) {
+            $scope.xebians = response.data;
+        });
+
         $scope.search = function() {
+            /*
             $http({
                 method : 'POST',
                 url : 'api/search',
@@ -12,6 +17,16 @@ angular.module('myApp.controllers', [])
                     search: $scope.query
                 }
             });
+            */
+            /*
+            $scope.results = [];
+            _.forEach($scope.xebians, function(xebian) {
+                if (_.contains(xebian.skills, {"name": $scope.query})){
+                    $scope.results.push(xebian.id);
+                }
+            });
+            */
+
         }
     }])
     .controller('ProfileCtrl', ['$scope', '$http', '$auth', function($scope, $http, $auth) {
@@ -31,6 +46,7 @@ angular.module('myApp.controllers', [])
             if (_.indexOf($scope.skills, $scope.newSkill) === -1) {
                 $http.put('api/xebian/'+$scope.email, $scope.newSkill).then(function(response) {
                     $scope.skills = response.data.skills;
+                    $scope.newSkill = "";
                 });
             }
         }

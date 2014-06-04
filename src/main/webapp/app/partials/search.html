@@ -4,16 +4,21 @@
 
             <div class="container">
                 <div id="search" class="row">
-                    <form  ng-submit="search()" class="form-inline" role="form">
-                        <div class="form-group has-success has-feedback">
-                            <label class="control-label" for="query">Chercher une compétence:</label>
-                            <input type="text" class="form-control" id="query" ng-model="query">
-                            <span class="glyphicon glyphicon-search form-control-feedback" ng-click="search()"></span>
-                        </div>
-                    </form>
+                    <div class="col-md-12">
+                        <form ng-submit="search()" class="form-inline" role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="skill" ng-model="query" placeholder="compétence">
+                            </div>
+                            <button type="submit" class="btn btn-primary" ng-click="search()">
+                                Chercher une compétence <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                        </form>
+                    </div>
                 </div>
                 <div id="results" class="row">
-                    search result
+                    <div class="col-md-12">
+                        <span class="text-center" ng-repeat="xebian in results">{{xebian.name}}</span>
+                    </div>
                 </div>
             </div>
         </div>
