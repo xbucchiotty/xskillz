@@ -23,6 +23,23 @@ public class XebianRepository {
         return xebians;
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{id}")
+    public Response find(@PathParam("id") final XebianId id) {
+        return from(xebians)
+                .firstMatch(Xebian.byId(id))
+                .transform(new Function<Xebian, Response>() {
+                    @Override
+                    public Response apply(Xebian xebian) {
+                        return Response.ok(xebian).build();
+                    }
+                })
+                .or(status(NOT_MODIFIED).build());
+
+    }
+
+
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
