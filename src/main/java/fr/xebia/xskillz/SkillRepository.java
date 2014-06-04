@@ -52,13 +52,7 @@ public class SkillRepository {
 
         while (iterator.hasNext()) {
             final String searchItem = iterator.next();
-            predicates.add(new Predicate<Skill>() {
-                @Override
-                public boolean apply(Skill o) {
-                    return o.getName().toLowerCase().contains(searchItem.toLowerCase());
-                }
-            });
-
+            predicates.add(Skill.skillPredicate(searchItem));
         }
         Predicate<Skill> skillPredicate = Predicates.or(predicates);
 
@@ -66,4 +60,5 @@ public class SkillRepository {
                 .filter(skillPredicate)
                 .toList();
     }
+
 }
