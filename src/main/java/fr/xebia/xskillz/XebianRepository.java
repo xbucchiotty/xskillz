@@ -77,7 +77,8 @@ public class XebianRepository {
         secondNode.setProperty("message", "World!");
 
         Relationship relationship = firstNode.createRelationshipTo(secondNode, Relation.KNOWS);
-        relationship.setProperty("message", "brave Neo4j ");
+
+            graphDb.beginTx();
 
         return databaseProvider.get().add(xebian) ? status(Response.Status.CREATED).build() : status(NOT_MODIFIED).build();
 
