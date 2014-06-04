@@ -1,4 +1,4 @@
 target/
-*.iml
+src/main/webapp/app/bower_components
 .idea/
 *.iml
