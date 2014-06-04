@@ -57,7 +57,7 @@ public class XebianRepository {
                     @Override
                     public Response apply(Xebian xebian) {
                         xebian.addSkill(new Skill(skill));
-                        return Response.ok().build();
+                        return Response.ok(xebian).build();
                     }
                 })
                 .or(status(NOT_MODIFIED).build());
