@@ -1,15 +1,20 @@
 package fr.xebia.xskillz;
 
+import com.google.common.base.Throwables;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
-import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 import com.sun.jersey.guice.JerseyServletModule;
+import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
+import org.neo4j.graphdb.GraphDatabaseService;
 
 import javax.inject.Singleton;
 import javax.servlet.ServletContextEvent;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class GuiceConfig extends GuiceServletContextListener {
 
@@ -24,6 +29,8 @@ public class GuiceConfig extends GuiceServletContextListener {
                 bind(AuthRepository.class).in(Singleton.class);
                 bind(SkillRepository.class).in(Singleton.class);
                 bind(DatabaseService.class).in(Singleton.class);
+                bind(GraphDatabaseService.class).toProvider(DatabaseService.class);
+
 
                 Map<String, String> params = new HashMap<>();
                 params.put("com.sun.jersey.api.json.POJOMappingFeature", "true");
@@ -37,6 +44,10 @@ public class GuiceConfig extends GuiceServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         super.contextInitialized(servletContextEvent);
-        injector.getProvider(DatabaseService.class).get().startAndWait();
+        try {
+            injector.getProvider(DatabaseService.class).get().startAsync().awaitRunning(10, SECONDS);
+        } catch (TimeoutException e) {
+            throw Throwables.propagate(e);
+        }
     }
 }

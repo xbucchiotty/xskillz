@@ -1,5 +1,7 @@
 package fr.xebia.xskillz;
 
-public enum Relation {
+import org.neo4j.graphdb.RelationshipType;
+
+public enum Relation implements RelationshipType {
     KNOWNS
 }
