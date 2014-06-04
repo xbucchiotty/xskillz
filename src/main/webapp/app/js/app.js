@@ -10,6 +10,7 @@ angular.module('myApp', [
   'myApp.controllers'
 ]).
 config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/skills', {templateUrl: 'partials/skills.html', controller: 'SkillsCtrl'});
-  $routeProvider.otherwise({redirectTo: '/skills'});
+  $routeProvider.when('/search', {templateUrl: 'partials/search.html', controller: 'SearchCtrl'});
+  $routeProvider.when('/profile', {templateUrl: 'partials/profile.html', controller: 'ProfileCtrl'});
+  $routeProvider.otherwise({redirectTo: '/search'});
 }]);

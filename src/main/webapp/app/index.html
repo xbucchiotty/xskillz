@@ -17,25 +17,49 @@
     <link rel="stylesheet" href="css/app.css"/>
 </head>
 <body>
-
-  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-          <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-              </button>
-              <a class="navbar-brand" href="#">Xkills Application version: v<span app-version></span></a>
-          </div>
-          <div class="navbar-collapse collapse">
-              <form class="navbar-form navbar-right" role="form">
-                  <a type="submit" href="../index.html" class="btn btn-success">Quitter</a>
-              </form>
-          </div><!--/.navbar-collapse -->
-      </div>
-  </div>
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Xkills Application version: v<span app-version></span></a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Rechercher</a></li>
+            </ul>
+            <div class="navbar-form navbar-right">
+                <a href="../index.html" class="btn btn-warning">Quitter</a>
+            </div>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</div>
+    <!--div class="navbar navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <span class="navbar-brand">Xkills Application version: v<span app-version></span></span>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Recherche</a>
+                    <li class="active"><a href="#">Ajouter des compétences à votre profil</a>
+                </ul>
+                <div class="navbar-form navbar-right">
+                    <a href="../index.html" class="btn btn-warning">Quitter</a>
+                </div>
+            </div>
+        </div>
+    </div-->
 
   <div ng-view></div>
 
