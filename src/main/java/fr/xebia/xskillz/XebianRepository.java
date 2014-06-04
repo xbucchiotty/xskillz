@@ -2,6 +2,8 @@ package fr.xebia.xskillz;
 
 import com.google.common.base.Function;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -69,13 +71,13 @@ public class XebianRepository {
     public Response put(Xebian xebian) {
         GraphDatabaseService graphDb = databaseProvider.get();
 
-        firstNode = graphDb.createNode();
-        firstNode.setProperty( "message", "Hello, " );
-        secondNode = graphDb.createNode();
-        secondNode.setProperty( "message", "World!" );
+        Node firstNode = graphDb.createNode();
+        firstNode.setProperty("message", "Hello, ");
+        Node secondNode = graphDb.createNode();
+        secondNode.setProperty("message", "World!");
 
-        relationship = firstNode.createRelationshipTo( secondNode, RelTypes.KNOWS );
-        relationship.setProperty( "message", "brave Neo4j " );
+        Relationship relationship = firstNode.createRelationshipTo(secondNode, Relation.KNOWS);
+        relationship.setProperty("message", "brave Neo4j ");
 
         return databaseProvider.get().add(xebian) ? status(Response.Status.CREATED).build() : status(NOT_MODIFIED).build();
 
