@@ -4,23 +4,16 @@ import com.google.common.base.Predicate;
 
 public class Skill {
 
+    private SkillId id;
+
     private String name;
 
-    public Skill(String name) {
-        assert name != null;
+    public Skill(long id, String name) {
+        this.id = new SkillId(id);
         this.name = name;
     }
 
     public Skill() {
-    }
-
-    static Predicate<Skill> skillPredicate(final String searchItem) {
-        return new Predicate<Skill>() {
-            @Override
-            public boolean apply(Skill o) {
-                return o.getName().toLowerCase().contains(searchItem.trim().toLowerCase());
-            }
-        };
     }
 
     public String getName() {
@@ -46,5 +39,18 @@ public class Skill {
     @Override
     public int hashCode() {
         return name.hashCode();
+    }
+
+    public static Predicate<Skill> searchForItem(final String searchedItem) {
+        return new Predicate<Skill>() {
+            @Override
+            public boolean apply(Skill o) {
+                return o.getName().toLowerCase().contains(searchedItem.trim().toLowerCase());
+            }
+        };
+    }
+
+    public static interface Properties {
+        String NAME = "name";
     }
 }

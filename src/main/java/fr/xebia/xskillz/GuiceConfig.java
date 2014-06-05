@@ -13,8 +13,11 @@ import javax.servlet.ServletContextEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
+import static java.util.logging.Level.SEVERE;
 
 public class GuiceConfig extends GuiceServletContextListener {
 
@@ -44,10 +47,21 @@ public class GuiceConfig extends GuiceServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         super.contextInitialized(servletContextEvent);
+        final DatabaseService databaseService = injector.getInstance(DatabaseService.class);
         try {
-            injector.getInstance(DatabaseService.class).startAsync().awaitRunning(30, SECONDS);
+            databaseService.startAsync().awaitRunning(30, SECONDS);
         } catch (TimeoutException e) {
             throw Throwables.propagate(e);
         }
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    databaseService.stopAsync().awaitTerminated(30, SECONDS);
+                } catch (TimeoutException e) {
+                    Logger.getGlobal().log(SEVERE, "Error while terminating database", e);
+                }
+            }
+        }));
     }
 }
