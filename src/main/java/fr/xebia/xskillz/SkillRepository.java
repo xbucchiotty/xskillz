@@ -33,7 +33,7 @@ public class SkillRepository {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<Skill> skills() {
-        return from(xebiansRepository.xebians()).transformAndConcat(new Function<Xebian, Collection<Skill>>() {
+        return from(xebiansRepository.allXebians()).transformAndConcat(new Function<Xebian, Collection<Skill>>() {
             @Override
             public Collection<Skill> apply(Xebian xebian) {
                 return xebian.getSkills();
@@ -52,13 +52,7 @@ public class SkillRepository {
 
         while (iterator.hasNext()) {
             final String searchItem = iterator.next();
-            predicates.add(new Predicate<Skill>() {
-                @Override
-                public boolean apply(Skill o) {
-                    return o.getName().toLowerCase().contains(searchItem.toLowerCase());
-                }
-            });
-
+            predicates.add(Skill.skillPredicate(searchItem));
         }
         Predicate<Skill> skillPredicate = Predicates.or(predicates);
 
@@ -66,4 +60,5 @@ public class SkillRepository {
                 .filter(skillPredicate)
                 .toList();
     }
+
 }

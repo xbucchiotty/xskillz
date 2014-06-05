@@ -1,4 +1,4 @@
 package fr.xebia.xskillz;
 
-public interface Database {
+public class Functions2 {
 }

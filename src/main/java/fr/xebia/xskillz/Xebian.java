@@ -5,6 +5,9 @@ import com.google.common.base.Predicate;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.google.common.collect.FluentIterable.from;
+import static fr.xebia.xskillz.Skill.skillPredicate;
+
 public class Xebian {
 
     private XebianId id;
@@ -34,6 +37,15 @@ public class Xebian {
             @Override
             public boolean apply(Xebian xebian) {
                 return xebian.getId() == id;
+            }
+        };
+    }
+
+    public static Predicate<Xebian> withSkill(final String query) {
+        return new Predicate<Xebian>() {
+            @Override
+            public boolean apply(Xebian xebian) {
+                return from(xebian.getSkills()).anyMatch(skillPredicate(query));
             }
         };
     }

@@ -9,7 +9,7 @@ angular.module('myApp.services', [])
     .value('version', '0.1')
     .factory('$auth', function ($http) {
         var getAuth = function() {
-            return $http.get("api/auth", {cache: true});
+            return $http.get("api/auth");
         };
         return {
             getAuth: getAuth
