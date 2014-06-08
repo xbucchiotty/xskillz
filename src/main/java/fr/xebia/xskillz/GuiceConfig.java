@@ -63,5 +63,7 @@ public class GuiceConfig extends GuiceServletContextListener {
                 }
             }
         }));
+
+        injector.getInstance(XebianRepository.class).createAXebian("john@xebia.fr");
     }
 }

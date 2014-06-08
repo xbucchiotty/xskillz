@@ -1,5 +1,6 @@
 package fr.xebia.xskillz;
 
+import com.google.common.base.Optional;
 import com.google.common.util.concurrent.AbstractIdleService;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
@@ -13,13 +14,13 @@ public class DatabaseService extends AbstractIdleService implements Provider<Gra
 
     public static final Logger logger = Logger.getAnonymousLogger();
 
-    private GraphDatabaseService graphDb;
+    private Optional<GraphDatabaseService> graphDb = Optional.absent();
 
     @Override
     protected void startUp() throws Exception {
         logger.info("Database starting");
 
-        graphDb = new GraphDatabaseFactory().newEmbeddedDatabase("target/data");
+        graphDb = Optional.of(new GraphDatabaseFactory().newEmbeddedDatabase("target/data"));
 
         logger.info("Database started");
     }
@@ -28,13 +29,17 @@ public class DatabaseService extends AbstractIdleService implements Provider<Gra
     protected void shutDown() throws Exception {
         logger.info("Database terminating");
 
-        graphDb.shutdown();
+        if(graphDb.isPresent()){
+            graphDb.get().shutdown();
+        }
+
+        graphDb = Optional.absent();
 
         logger.info("Database terminated");
     }
 
     @Override
     public GraphDatabaseService get() {
-        return graphDb;
+        return graphDb.orNull();
     }
 }

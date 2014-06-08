@@ -12,10 +12,13 @@ import java.util.Map;
 import static com.google.common.base.Optional.fromNullable;
 import static com.google.common.base.Predicates.equalTo;
 import static com.google.common.collect.FluentIterable.from;
-import static fr.xebia.xskillz.Relations.KNOWS;
 import static fr.xebia.xskillz.Relations.toEndNode;
 
 public abstract class Database {
+
+    private Database() {
+
+    }
 
     public static Function<GraphDatabaseService, Optional<Node>> queryNodeById(final Long id) {
         return new Function<GraphDatabaseService, Optional<Node>>() {
@@ -77,7 +80,7 @@ public abstract class Database {
                         .anyMatch(equalTo(endNode));
 
                 if (!relationExists) {
-                    xebianNode.createRelationshipTo(endNode, KNOWS);
+                    xebianNode.createRelationshipTo(endNode, relations);
                 }
 
                 return xebianNode;

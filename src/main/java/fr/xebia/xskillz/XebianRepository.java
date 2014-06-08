@@ -22,6 +22,7 @@ import static fr.xebia.xskillz.Functions2.chain;
 import static fr.xebia.xskillz.Functions2.liftForOptions;
 import static fr.xebia.xskillz.Responses.ok;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 @Path("/xebian")
 @Singleton
@@ -32,7 +33,6 @@ public class XebianRepository {
     @Inject
     public XebianRepository(Provider<GraphDatabaseService> databaseProvider) {
         this.databaseProvider = databaseProvider;
-        createAXebian("john@xebia.fr");
     }
 
     @GET
@@ -66,7 +66,7 @@ public class XebianRepository {
     public Response findById(@PathParam("id") final long id) {
         return withinTransaction(chain(Xebians.findById(id), liftForOptions(Xebians.fromNode)), databaseProvider)
                 .transform(Responses.ok())
-                .or(Response.notModified().build());
+                .or(Response.status(NOT_FOUND).build());
 
     }
 
