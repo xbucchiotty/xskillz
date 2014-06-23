@@ -1,7 +1,6 @@
 package fr.xebia.xskillz;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
+import com.google.common.base.Function;
 import com.google.inject.util.Providers;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,11 +9,10 @@ import org.neo4j.graphdb.Node;
 
 import javax.ws.rs.core.Response;
 
-import java.util.HashSet;
-
 import static fr.xebia.xskillz.ResponseAssert.assertThatResponse;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static javax.ws.rs.core.Response.Status.OK;
+import static org.fest.assertions.api.Assertions.assertThat;
 
 public class XebianRepositoryTest {
 
@@ -30,15 +28,25 @@ public class XebianRepositoryTest {
 
     @Test
     public void findById_should_find_xebian_by_id_and_returns_it_as_ok() {
-        Node knownSkillNode = aSkillNode(A_KNOWN_SKILL);
-        Node anUnknownSkillNode = aSkillNode(AN_UNKNOWN_SKILL);
-        Node xebianNode = aXebianNode(anEmail);
+        final Node knownSkillNode = aSkillNode(A_KNOWN_SKILL);
+        aSkillNode(AN_UNKNOWN_SKILL);
+        final Node xebianNode = aXebianNode(anEmail, knownSkillNode);
 
         Response result = repository.findById(xebianNode.getId());
 
         assertThatResponse(result)
                 .hasStatusCode(OK)
-                .hasEntity(new Xebian(xebianNode.getId(), anEmail, ImmutableSet.of(new Skill(knownSkillNode.getId(), A_KNOWN_SKILL))));
+                .isWithEntityMatching(new Function<Object, Void>() {
+                    @Override
+                    public Void apply(Object entity) {
+                        assertThat(entity).isInstanceOf(Xebian.class);
+
+                        Xebian expected = new Xebian(xebianNode.getId(), anEmail);
+                        expected.addSkill(Skills.fromNode.apply(knownSkillNode));
+                        assertThat(entity).isEqualsToByComparingFields(expected);
+                        return null;
+                    }
+                });
     }
 
     @Test

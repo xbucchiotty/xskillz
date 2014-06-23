@@ -1,5 +1,6 @@
 package fr.xebia.xskillz;
 
+import com.google.common.base.Function;
 import org.fest.assertions.api.AbstractAssert;
 import org.fest.assertions.api.Assertions;
 
@@ -23,6 +24,11 @@ public class ResponseAssert extends AbstractAssert<ResponseAssert, Response> {
 
     public ResponseAssert hasEntity(Object anEntity) {
         Assertions.assertThat(actual.getEntity()).isEqualTo(anEntity);
+        return this;
+    }
+
+    public ResponseAssert isWithEntityMatching(Function<Object, Void> checker) {
+        checker.apply(actual.getEntity());
         return this;
     }
 }
