@@ -1,18 +1,17 @@
 package fr.xebia.xskillz;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.graphdb.*;
 
 import javax.inject.Provider;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 
-import static com.google.common.base.Optional.fromNullable;
-import static com.google.common.base.Predicates.equalTo;
-import static com.google.common.collect.FluentIterable.from;
+import static fr.xebia.xskillz.Functions.stream;
 import static fr.xebia.xskillz.Relations.toEndNode;
+import static java.util.stream.Collectors.toList;
 
 public abstract class Database {
 
@@ -21,12 +20,7 @@ public abstract class Database {
     }
 
     public static Function<GraphDatabaseService, Optional<Node>> queryNodeById(final Long id) {
-        return new Function<GraphDatabaseService, Optional<Node>>() {
-            @Override
-            public Optional<Node> apply(GraphDatabaseService graphDb) {
-                return fromNullable(graphDb.getNodeById(id));
-            }
-        };
+        return graphDb -> Optional.ofNullable(graphDb.getNodeById(id));
     }
 
     public static <T> T withinTransaction(final Function<GraphDatabaseService, T> f, Provider<GraphDatabaseService> databaseProvider) {
@@ -41,24 +35,16 @@ public abstract class Database {
     }
 
     public static Function<Map<String, Object>, Node> extractNodeFromColumn(final String column) {
-        return new Function<Map<String, Object>, Node>() {
-            @Override
-            public Node apply(Map<String, Object> map) {
-                return (Node) map.get(column);
-            }
-        };
+        return map -> (Node) map.get(column);
     }
 
     public static <T> Function<GraphDatabaseService, Collection<T>> queryAll(final String query, final Function<Map<String, Object>, T> dataExtractor) {
-        return new Function<GraphDatabaseService, Collection<T>>() {
-            @Override
-            public Collection<T> apply(GraphDatabaseService graphDb) {
-                ExecutionEngine engine = new ExecutionEngine(graphDb);
+        return graphDb -> {
+            ExecutionEngine engine = new ExecutionEngine(graphDb);
 
-                return from(engine.execute(query))
-                        .transform(dataExtractor)
-                        .toList();
-            }
+            return stream(engine.execute(query))
+                    .map(dataExtractor)
+                    .collect(toList());
         };
     }
 
@@ -66,7 +52,9 @@ public abstract class Database {
         return new Function<GraphDatabaseService, Node>() {
             @Override
             public Node apply(GraphDatabaseService graphDb) {
-                return from(graphDb.findNodesByLabelAndProperty(label, propertyKey, value)).first().or(or.apply(graphDb));
+                return stream(graphDb.findNodesByLabelAndProperty(label, propertyKey, value))
+                        .findFirst()
+                        .orElse(or.apply(graphDb));
             }
         };
     }
@@ -75,17 +63,16 @@ public abstract class Database {
         return new Function<Node, Node>() {
             @Override
             public Node apply(Node xebianNode) {
-                boolean relationExists = from(xebianNode.getRelationships(direction, relations))
-                        .transform(toEndNode)
-                        .anyMatch(equalTo(endNode));
-
-                if (!relationExists) {
-                    xebianNode.createRelationshipTo(endNode, relations);
-                }
-
-                return xebianNode;
+                return stream(xebianNode.getRelationships(direction, relations))
+                        .map(toEndNode)
+                        .filter(node -> node.equals(endNode))
+                        .findFirst()
+                        .orElseGet(() -> {
+                            xebianNode.createRelationshipTo(endNode, relations);
+                            return xebianNode;
+                        });
             }
-
         };
     }
+
 }

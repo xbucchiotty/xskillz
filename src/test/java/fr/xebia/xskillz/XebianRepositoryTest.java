@@ -1,6 +1,5 @@
 package fr.xebia.xskillz;
 
-import com.google.common.base.Function;
 import com.google.inject.util.Providers;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,21 +35,18 @@ public class XebianRepositoryTest {
 
         assertThatResponse(result)
                 .hasStatusCode(OK)
-                .isWithEntityMatching(new Function<Object, Void>() {
-                    @Override
-                    public Void apply(Object entity) {
-                        assertThat(entity).isInstanceOf(Xebian.class);
+                .isWithEntityMatching(entity -> {
+                    assertThat(entity).isInstanceOf(Xebian.class);
 
-                        Xebian expected = new Xebian(xebianNode.getId(), anEmail);
-                        expected.addSkill(Skills.fromNode.apply(knownSkillNode));
-                        assertThat(entity).isEqualsToByComparingFields(expected);
-                        return null;
-                    }
+                    Xebian expected = new Xebian(xebianNode.getId(), anEmail);
+                    expected.addSkill(Skills.fromNode.apply(knownSkillNode));
+                    assertThat(entity).isEqualsToByComparingFields(expected);
+                    return null;
                 });
     }
 
     @Test
-    public void findById_should_reponse_not_found_if_no_xebian_with_given_id() {
+    public void findById_should_response_not_found_if_no_xebian_with_given_id() {
         Response result = repository.findById(UNKOWN_XEBIAN_ID);
 
         assertThatResponse(result).hasStatusCode(NOT_FOUND);

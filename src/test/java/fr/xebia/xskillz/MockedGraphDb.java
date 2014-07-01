@@ -15,7 +15,6 @@ import static com.google.common.base.Predicates.and;
 import static com.google.common.collect.FluentIterable.from;
 import static fr.xebia.xskillz.TestHelpers.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class MockedGraphDb implements GraphDatabaseService {
 

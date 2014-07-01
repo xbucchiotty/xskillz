@@ -1,6 +1,6 @@
 package fr.xebia.xskillz;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 
 public class Skill {
 
@@ -42,12 +42,7 @@ public class Skill {
     }
 
     public static Predicate<Skill> searchForItem(final String searchedItem) {
-        return new Predicate<Skill>() {
-            @Override
-            public boolean apply(Skill o) {
-                return o.getName().toLowerCase().contains(searchedItem.trim().toLowerCase());
-            }
-        };
+        return o -> o.getName().toLowerCase().contains(searchedItem.trim().toLowerCase());
     }
 
     public static interface Properties {

@@ -42,12 +42,7 @@ public class TestHelpers {
     }
 
     public static Function<Relationship, RelationshipType> toType() {
-        return new Function<Relationship, RelationshipType>() {
-            @Override
-            public RelationshipType apply(Relationship relationship) {
-                return relationship.getType();
-            }
-        };
+        return Relationship::getType;
     }
 
     public static Predicate<Relationship> relationshipIsOfType(final RelationshipType... relationshipTypes) {
@@ -61,57 +56,23 @@ public class TestHelpers {
         };
     }
 
-    public static Predicate<Relationship> hasEndNode(final Node node) {
-        return new Predicate<Relationship>() {
-            @Override
-            public boolean apply(Relationship input) {
-                return input.getEndNode().equals(node);
-            }
-        };
-    }
-
     public static Predicate<Node> nodeId(final long l) {
-        return new Predicate<Node>() {
-            @Override
-            public boolean apply(Node input) {
-                return input.getId() == l;
-            }
-        };
+        return input -> input.getId() == l;
     }
 
     public static Function<Node, Iterable<Relationship>> toRelations() {
-        return new Function<Node, Iterable<Relationship>>() {
-            @Override
-            public Iterable<Relationship> apply(Node node) {
-                return node.getRelationships();
-            }
-        };
+        return Node::getRelationships;
     }
 
     public static Predicate<Relationship> relationshipId(final long l) {
-        return new Predicate<Relationship>() {
-            @Override
-            public boolean apply(Relationship relationship) {
-                return relationship.getId() == l;
-            }
-        };
+        return relationship -> relationship.getId() == l;
     }
 
     public static Predicate<Node> nodeHasLabel(final Label label) {
-        return new Predicate<Node>() {
-            @Override
-            public boolean apply(Node input) {
-                return input.hasLabel(label);
-            }
-        };
+        return input -> input.hasLabel(label);
     }
 
     public static Predicate<Node> hasProperty(final String s, final Object o) {
-        return new Predicate<Node>() {
-            @Override
-            public boolean apply(Node input) {
-                return input.getProperty(s, o) != null;
-            }
-        };
+        return input -> input.getProperty(s, o) != null;
     }
 }

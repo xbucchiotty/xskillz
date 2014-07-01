@@ -1,7 +1,5 @@
 package fr.xebia.xskillz;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +8,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.neo4j.graphdb.*;
 
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 
 import static com.google.inject.util.Providers.of;
 import static fr.xebia.xskillz.Database.*;
@@ -64,12 +64,7 @@ public class DatabaseTest {
         firstNode.setProperty(aProperty, aValue);
         final Node aNode = graphDb.createNode();
 
-        Node result = findOr(aLabel, aProperty, aValue, new Function<GraphDatabaseService, Node>() {
-            @Override
-            public Node apply(GraphDatabaseService input) {
-                return aNode;
-            }
-        }).apply(graphDb);
+        Node result = findOr(aLabel, aProperty, aValue, input -> aNode).apply(graphDb);
 
         assertThat(result).isEqualTo(firstNode);
     }
@@ -78,12 +73,7 @@ public class DatabaseTest {
     public void findOr_should_returns_default_value_when_node_not_found() {
         final Node aNode = graphDb.createNode();
 
-        Node result = findOr(aLabel, aProperty, aValue, new Function<GraphDatabaseService, Node>() {
-            @Override
-            public Node apply(GraphDatabaseService input) {
-                return aNode;
-            }
-        }).apply(graphDb);
+        Node result = findOr(aLabel, aProperty, aValue, input -> aNode).apply(graphDb);
 
         assertThat(result).isEqualTo(aNode);
     }
@@ -111,12 +101,7 @@ public class DatabaseTest {
 
     @Test
     public void withinTransaction_should_execution_inner_function_inside_transaction() {
-        Function<GraphDatabaseService, String> innerFunction = new Function<GraphDatabaseService, String>() {
-            @Override
-            public String apply(GraphDatabaseService input) {
-                return "result";
-            }
-        };
+        Function<GraphDatabaseService, String> innerFunction = input -> "result";
         GraphDatabaseService spy = spy(graphDb);
         when(spy.beginTx()).thenReturn(tx);
 

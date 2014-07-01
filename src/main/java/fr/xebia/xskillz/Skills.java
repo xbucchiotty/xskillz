@@ -1,8 +1,9 @@
 package fr.xebia.xskillz;
 
-import com.google.common.base.Function;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
+
+import java.util.function.Function;
 
 import static fr.xebia.xskillz.Database.addRelation;
 import static fr.xebia.xskillz.Database.findOr;
@@ -20,13 +21,10 @@ public abstract class Skills {
     };
 
     public static Function<GraphDatabaseService, Node> create(final String skillName) {
-        return new Function<GraphDatabaseService, Node>() {
-            @Override
-            public Node apply(GraphDatabaseService graphDb) {
-                Node node = graphDb.createNode(SKILL);
-                node.setProperty(Skill.Properties.NAME, skillName);
-                return node;
-            }
+        return graphDb -> {
+            Node node = graphDb.createNode(SKILL);
+            node.setProperty(Skill.Properties.NAME, skillName);
+            return node;
         };
     }
 

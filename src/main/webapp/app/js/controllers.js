@@ -4,10 +4,6 @@
 
 angular.module('myApp.controllers', [])
     .controller('SearchCtrl', ['$scope', '$http', '$auth', function($scope, $http, $auth) {
-        $http.get('api/xebian').then(function(response) {
-            $scope.xebians = response.data;
-        });
-
         $scope.search = function() {
             $http({
                 method : 'GET',
@@ -18,7 +14,7 @@ angular.module('myApp.controllers', [])
             }).then(function(response) {
                     $scope.results = [];
                     _.forEach(response.data, function(xebian) {
-                        $scope.results.push(xebian.id.email);
+                        $scope.results.push(xebian.email);
                     });
                 });
             /*
@@ -38,7 +34,7 @@ angular.module('myApp.controllers', [])
         promise.then(function (response) {
             $scope.email = response.data;
 
-            $http.get('api/xebian/'+$scope.email).then(function(response) {
+            $http.get('api/xebian?email='+$scope.email).then(function(response) {
                 $scope.skills = response.data.skills;
             });
         });
@@ -47,9 +43,20 @@ angular.module('myApp.controllers', [])
         $scope.newSkill = "";
         $scope.addSkill = function() {
             if (_.indexOf($scope.skills, $scope.newSkill) === -1) {
-                $http.put('api/xebian/'+$scope.email, $scope.newSkill).then(function(response) {
-                    $scope.skills = response.data.skills;
-                    $scope.newSkill = "";
+                $http({
+                    method : 'GET',
+                    url : 'api/xebian',
+                    params : {
+                        "email": $scope.email
+                    }
+                }).then(function(response) {
+                    $scope.results = [];
+                    $scope.id=_.first(response.data).id.value;
+
+                    $http.put('api/xebian/'+$scope.id, $scope.newSkill).then(function(response) {
+                        $scope.skills = response.data.skills;
+                        $scope.newSkill = "";
+                    });
                 });
             }
         }
