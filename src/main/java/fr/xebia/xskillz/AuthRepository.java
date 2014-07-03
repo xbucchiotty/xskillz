@@ -7,26 +7,25 @@ import javax.inject.Provider;
 import javax.inject.Singleton;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import java.util.stream.Stream;
 
 @Path("/auth")
 @Singleton
 public class AuthRepository {
 
-    private final XebianRepository xebiansRepository;
-
     private final Provider<GraphDatabaseService> databaseProvider;
 
     @Inject
-    public AuthRepository(XebianRepository xebians, Provider<GraphDatabaseService> databaseProvider) {
-        this.xebiansRepository = xebians;
+    public AuthRepository(Provider<GraphDatabaseService> databaseProvider) {
         this.databaseProvider = databaseProvider;
     }
 
     @GET
     public String randomAccount() {
-        return xebiansRepository.xebians().stream()
-                .findFirst()
-                .orElseGet(() -> Xebians.create("john@xebia.fr").andThen(Xebians.fromNode).apply(databaseProvider.get()))
+        return Transaction.start(Xebians.queryAll())
+                .map(Stream::findFirst)
+                .map(optionalXebian -> optionalXebian.orElseGet(() -> Xebians.create("john@xebia.fr").andThen(Xebians.fromNode).apply(databaseProvider.get())))
+                .run(databaseProvider)
                 .getEmail();
     }
 }

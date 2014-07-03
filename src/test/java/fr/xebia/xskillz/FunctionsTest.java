@@ -5,7 +5,7 @@ import org.junit.Test;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static fr.xebia.xskillz.Functions.liftForOptions;
+import static fr.xebia.xskillz.Functions.liftO;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 public class FunctionsTest {
@@ -17,7 +17,7 @@ public class FunctionsTest {
         final String expectation = "expected";
         Function<String, String> functionWithOutput = s -> expectation;
 
-        Function<Optional<String>, Optional<String>> liftedFWith = liftForOptions(functionWithOutput);
+        Function<Optional<String>, Optional<String>> liftedFWith = liftO(functionWithOutput);
 
         assertThat(liftedFWith.apply(Optional.of("input"))).isEqualTo(Optional.of(expectation));
         assertThat(liftedFWith.apply(ABSENT)).isEqualTo(ABSENT);

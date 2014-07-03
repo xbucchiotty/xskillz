@@ -8,6 +8,7 @@ import org.neo4j.graphdb.Node;
 
 import javax.ws.rs.core.Response;
 
+import static fr.xebia.xskillz.Relations.KNOWS;
 import static fr.xebia.xskillz.ResponseAssert.assertThatResponse;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static javax.ws.rs.core.Response.Status.OK;
@@ -61,7 +62,7 @@ public class XebianRepositoryTest {
         Node xebian = Xebians.create(email).apply(graphDb);
 
         for (Node skill : skills) {
-            Skills.addKnown(skill).apply(xebian);
+            Database.createRelationFrom(xebian, KNOWS).apply(skill);
         }
 
         return xebian;

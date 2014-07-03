@@ -84,6 +84,10 @@ public class Xebian {
         this.email = email;
     }
 
+    public boolean matches(String expectedSkill) {
+        return skills.stream().anyMatch(skill -> skill.matches(expectedSkill));
+    }
+
     public static interface Properties {
         String EMAIL = "email";
     }

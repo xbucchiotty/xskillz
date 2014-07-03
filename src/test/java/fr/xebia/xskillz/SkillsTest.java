@@ -6,6 +6,7 @@ import org.neo4j.graphdb.Node;
 
 import static fr.xebia.xskillz.Labels.SKILL;
 import static fr.xebia.xskillz.Labels.XEBIAN;
+import static fr.xebia.xskillz.Relations.KNOWS;
 import static fr.xebia.xskillz.Skills.*;
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -39,9 +40,9 @@ public class SkillsTest {
         MockedNode skillNode = new MockedNode(SKILL);
         MockedNode startNode = new MockedNode(XEBIAN);
 
-        addKnown(skillNode).apply(startNode);
+        Database.createRelationFrom(startNode, KNOWS).apply(skillNode);
 
-        assertThat(startNode.getRelationships(Relations.KNOWS, OUTGOING)).isNotNull();
+        assertThat(startNode.getRelationships(KNOWS, OUTGOING)).isNotNull();
     }
 
     @Test

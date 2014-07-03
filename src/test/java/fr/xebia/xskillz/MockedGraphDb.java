@@ -78,8 +78,8 @@ public class MockedGraphDb implements GraphDatabaseService {
     }
 
     @Override
-    public Transaction beginTx() {
-        return mock(Transaction.class);
+    public org.neo4j.graphdb.Transaction beginTx() {
+        return mock(org.neo4j.graphdb.Transaction.class);
 
     }
 

@@ -45,6 +45,10 @@ public class Skill {
         return o -> o.getName().toLowerCase().contains(searchedItem.trim().toLowerCase());
     }
 
+    public boolean matches(String expected) {
+        return name.toLowerCase().contains(expected.toLowerCase());
+    }
+
     public static interface Properties {
         String NAME = "name";
     }

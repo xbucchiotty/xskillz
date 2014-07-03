@@ -30,7 +30,6 @@ public class GuiceConfig extends GuiceServletContextListener {
             protected void configureServlets() {
                 bind(XebianRepository.class).in(Singleton.class);
                 bind(AuthRepository.class).in(Singleton.class);
-                bind(SkillRepository.class).in(Singleton.class);
                 bind(DatabaseService.class).in(Singleton.class);
                 bind(GraphDatabaseService.class).toProvider(DatabaseService.class);
 
