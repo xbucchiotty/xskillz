@@ -1,8 +1,8 @@
 <div class="container">
     <div class="row">
-        <div class="col-sm-6 col-sm-offset-3">
+        <div class="col-sm-4 col-sm-offset-3">
 
-            <div class="container">
+            <div>
                 <div id="search" class="row">
                     <div class="col-md-12">
                         <form ng-submit="search()" class="form-inline" role="form">
@@ -17,7 +17,9 @@
                 </div>
                 <div id="results" class="row">
                     <div class="col-md-12">
-                        <a class="text-center" class="badge" href="#/profile/{{xebian}}" ng-repeat="xebian in results">{{xebian}}</a>
+                        <ul class="list-group">
+                            <li class="list-group-item" ng-repeat="xebian in results"><a class="text-center" class="badge" href="#/profile/{{xebian}}">{{xebian}}</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>

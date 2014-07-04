@@ -38,13 +38,6 @@ public abstract class Xebians {
         };
     }
 
-    public static Function<GraphDatabaseService, Optional<Node>> findById(long id) {
-        return execute("MATCH (n:" + XEBIAN + ") RETURN n")
-                .andThen(liftS(extractNode("n")))
-                .andThen(stream -> stream.filter(node -> node.getId() == id))
-                .andThen(Stream::findFirst);
-    }
-
     public static Function<GraphDatabaseService, Stream<Xebian>> queryAll() {
         return execute("MATCH (n:" + XEBIAN + ") RETURN n")
                 .andThen(liftS(extractNode("n").andThen(fromNode)));

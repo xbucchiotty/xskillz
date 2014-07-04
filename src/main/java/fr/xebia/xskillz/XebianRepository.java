@@ -35,9 +35,9 @@ public class XebianRepository {
 
     @GET
     @Produces(APPLICATION_JSON)
-    @Path("{id}")
-    public Response findById(@PathParam("id") final long id) {
-        return Transaction.start(Xebians.findById(id))
+    @Path("{email}")
+    public Response findById(@PathParam("email") final String email) {
+        return Transaction.start(Xebians.findByEmail(email))
                 .map(liftO(Xebians.fromNode))
                 .map(Responses.ok())
                 .run(databaseProvider);
@@ -45,13 +45,11 @@ public class XebianRepository {
 
     @GET
     @Produces(APPLICATION_JSON)
-    public Collection<Xebian> searchForXebians(@QueryParam("q") final String skillQuery, @QueryParam("email") String email) {
-
-        Predicate<Xebian> emailPredicate = xebian -> Strings.isNullOrEmpty(email) || xebian.getEmail().equals(email);
+    public Collection<Xebian> searchForXebians(@QueryParam("q") final String skillQuery) {
         Predicate<Xebian> skillPredicate = xebian -> Strings.isNullOrEmpty(skillQuery) || xebian.matches(skillQuery);
 
         return Transaction.start(Xebians.queryAll())
-                .map(stream -> stream.filter(emailPredicate.and(skillPredicate)))
+                .map(stream -> stream.filter(skillPredicate))
                 .map(toList())
                 .run(databaseProvider);
     }
@@ -72,9 +70,9 @@ public class XebianRepository {
 
     @PUT
     @Produces(APPLICATION_JSON)
-    @Path("{id}")
-    public Response addSkill(@PathParam("id") final long id, final String skillName) {
-        return Transaction.start(Xebians.findById(id))
+    @Path("{email}")
+    public Response addSkill(@PathParam("email") final String email, final String skillName) {
+        return Transaction.start(Xebians.findByEmail(email))
                 .flatMap(db -> liftO(createKnownRelation(skillName).apply(db)))
                 .map(liftO(Xebians.fromNode))
                 .map(Responses.ok())

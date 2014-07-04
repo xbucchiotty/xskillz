@@ -23,7 +23,6 @@ public class XebianRepositoryTest {
     public static final String NEO4J_SKILL = "neo4j";
     public static final String AN_UNKNOWN_SKILL = "C++";
     public static final String EMPTY_SKILL_QUERY = "";
-    public static final String EMPTY_EMAIL_QUERY = "";
 
     private static GraphDatabaseService db;
     private org.neo4j.graphdb.Transaction tx;
@@ -39,7 +38,7 @@ public class XebianRepositoryTest {
         Xebian expected = new Xebian(xebianNode.getId(), anEmail);
         expected.addSkill(Skills.fromNode.apply(neo4JNode));
 
-        Response result = repository.findById(xebianNode.getId());
+        Response result = repository.findById(anEmail);
 
         assertThatResponse(result)
                 .hasStatusCode(OK)
@@ -52,9 +51,7 @@ public class XebianRepositoryTest {
 
     @Test
     public void findById_should_reply_not_found_when_xebian_not_found() {
-        final Node neo4JNode = Skills.findOrCreate(NEO4J_SKILL).apply(db);
-
-        Response result = repository.findById(neo4JNode.getId());
+        Response result = repository.findById(generateEmail());
 
         assertThatResponse(result).hasStatusCode(NOT_FOUND);
     }
@@ -90,27 +87,11 @@ public class XebianRepositoryTest {
 
         Database.addRelationshipTo(xebian1, KNOWS).apply(neo4JSkill);
 
-        Collection<Xebian> xebians = repository.searchForXebians(EMPTY_SKILL_QUERY, EMPTY_EMAIL_QUERY);
+        Collection<Xebian> xebians = repository.searchForXebians(EMPTY_SKILL_QUERY);
 
         assertThat(xebians.size()).isGreaterThanOrEqualTo(2);
         assertThat(xebians.stream().anyMatch(xebian -> xebian.getEmail().equals(email1))).isTrue();
         assertThat(xebians.stream().anyMatch(xebian -> xebian.getEmail().equals(email2))).isTrue();
-    }
-
-    @Test
-    public void searchForXebians_should_filter_xebians_by_email() {
-        String email1 = generateEmail();
-        String email2 = generateEmail();
-        Node xebian1 = Xebians.create(email1).apply(db);
-        Xebians.create(email2).apply(db);
-        Node neo4JSkill = Skills.findOrCreate(NEO4J_SKILL).apply(db);
-
-        Database.addRelationshipTo(xebian1, KNOWS).apply(neo4JSkill);
-
-        Collection<Xebian> xebians = repository.searchForXebians(EMPTY_SKILL_QUERY, email1);
-
-        assertThat(xebians).hasSize(1);
-        assertThat(xebians.iterator().next().getEmail()).isEqualTo(email1);
     }
 
     @Test
@@ -123,7 +104,7 @@ public class XebianRepositoryTest {
 
         Database.addRelationshipTo(xebian1, KNOWS).apply(neo4JSkill);
 
-        Collection<Xebian> xebians = repository.searchForXebians(NEO4J_SKILL, EMPTY_EMAIL_QUERY);
+        Collection<Xebian> xebians = repository.searchForXebians(NEO4J_SKILL);
 
         assertThat(xebians).hasSize(1);
         assertThat(xebians.iterator().next().getEmail()).isEqualTo(email1);
@@ -131,11 +112,11 @@ public class XebianRepositoryTest {
 
     @Test
     public void addSkill_should_add_skill_to_existing_xebian_when_skill_exists() {
-        String email1 = generateEmail();
-        Node xebianNode = Xebians.create(email1).apply(db);
+        String anEmail = generateEmail();
+        Node xebianNode = Xebians.create(anEmail).apply(db);
         Skills.create(NEO4J_SKILL).apply(db);
 
-        Response response = repository.addSkill(xebianNode.getId(), NEO4J_SKILL);
+        Response response = repository.addSkill(anEmail, NEO4J_SKILL);
 
         assertThatResponse(response)
                 .hasStatusCode(OK)
@@ -151,11 +132,11 @@ public class XebianRepositoryTest {
 
     @Test
     public void addSkill_should_add_skill_to_existing_xebian_when_skill_does_not_exists() {
-        String email1 = generateEmail();
-        Node xebianNode = Xebians.create(email1).apply(db);
+        String anEmail = generateEmail();
+        Node xebianNode = Xebians.create(anEmail).apply(db);
         String aSKillName = generateSkillName();
 
-        Response response = repository.addSkill(xebianNode.getId(), aSKillName);
+        Response response = repository.addSkill(anEmail, aSKillName);
 
         assertThatResponse(response)
                 .hasStatusCode(OK)
@@ -171,9 +152,7 @@ public class XebianRepositoryTest {
 
     @Test
     public void addSkill_should_reply_not_found_when_xebian_does_not_exist() {
-        final Node neo4JNode = Skills.findOrCreate(NEO4J_SKILL).apply(db);
-
-        Response result = repository.addSkill(neo4JNode.getId(), NEO4J_SKILL);
+        Response result = repository.addSkill(generateEmail(), NEO4J_SKILL);
 
         assertThatResponse(result).hasStatusCode(NOT_FOUND);
     }
