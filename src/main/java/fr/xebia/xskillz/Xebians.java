@@ -3,7 +3,6 @@ package fr.xebia.xskillz;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
@@ -40,9 +39,10 @@ public abstract class Xebians {
     }
 
     public static Function<GraphDatabaseService, Optional<Node>> findById(long id) {
-        return execute("START n=node(" + id + ") RETURN n")
-                .andThen(Stream::findFirst)
-                .andThen(liftO(extractNode("n")));
+        return execute("MATCH (n:" + XEBIAN + ") RETURN n")
+                .andThen(liftS(extractNode("n")))
+                .andThen(stream -> stream.filter(node -> node.getId() == id))
+                .andThen(Stream::findFirst);
     }
 
     public static Function<GraphDatabaseService, Stream<Xebian>> queryAll() {

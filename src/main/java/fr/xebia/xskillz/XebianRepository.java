@@ -13,10 +13,8 @@ import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static fr.xebia.xskillz.Database.createRelationFrom;
-import static fr.xebia.xskillz.Functions.getOptionalOr;
-import static fr.xebia.xskillz.Functions.liftO;
-import static fr.xebia.xskillz.Functions.toList;
+import static fr.xebia.xskillz.Database.addRelationshipTo;
+import static fr.xebia.xskillz.Functions.*;
 import static fr.xebia.xskillz.Relations.KNOWS;
 import static fr.xebia.xskillz.Responses.redirectToNode;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -47,10 +45,10 @@ public class XebianRepository {
 
     @GET
     @Produces(APPLICATION_JSON)
-    public Collection<Xebian> searchForXebians(@QueryParam("q") final String query, @QueryParam("email") String email) {
+    public Collection<Xebian> searchForXebians(@QueryParam("q") final String skillQuery, @QueryParam("email") String email) {
 
         Predicate<Xebian> emailPredicate = xebian -> Strings.isNullOrEmpty(email) || xebian.getEmail().equals(email);
-        Predicate<Xebian> skillPredicate = xebian -> Strings.isNullOrEmpty(query) || xebian.matches(query);
+        Predicate<Xebian> skillPredicate = xebian -> Strings.isNullOrEmpty(skillQuery) || xebian.matches(skillQuery);
 
         return Transaction.start(Xebians.queryAll())
                 .map(stream -> stream.filter(emailPredicate.and(skillPredicate)))
@@ -66,7 +64,7 @@ public class XebianRepository {
                 created(fromResource(XebianRepository.class).path(Long.toString(node.getId())).build()).build());
 
         return Transaction.start(Xebians.findByEmail(email))
-                .map(liftO(redirectToNode()))
+                .map(liftO(redirectToNode(XebianRepository.class)))
                 .flatMap(db -> getOptionalOr(() -> createAndDisplay.apply(db)))
                 .run(databaseProvider);
 
@@ -87,8 +85,8 @@ public class XebianRepository {
     public static Function<GraphDatabaseService, Function<Node, Node>> createKnownRelation(String skillName) {
         return db -> xebianNode ->
                 Skills.findOrCreate(skillName)
-                        .andThen(createRelationFrom(xebianNode, KNOWS))
-                        .andThen(optional -> xebianNode).apply(db);
+                        .andThen(addRelationshipTo(xebianNode, KNOWS))
+                        .andThen(relation -> xebianNode).apply(db);
     }
 
 }

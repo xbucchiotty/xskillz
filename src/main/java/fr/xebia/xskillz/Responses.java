@@ -17,8 +17,8 @@ public class Responses {
                 .orElse(Response.status(NOT_FOUND).build());
     }
 
-    public static Function<Node, Response> redirectToNode() {
+    public static Function<Node, Response> redirectToNode(Class<?> resource) {
         return ((Function<Node, Long>) Node::getId)
-                    .andThen(id -> seeOther(fromResource(XebianRepository.class).path(id.toString()).build()).build());
+                .andThen(id -> seeOther(fromResource(resource).path(id.toString()).build()).build());
     }
 }

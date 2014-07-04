@@ -9,6 +9,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import java.util.stream.Stream;
 
+import static fr.xebia.xskillz.Functions.getOptionalOr;
+
 @Path("/auth")
 @Singleton
 public class AuthRepository {
@@ -24,7 +26,7 @@ public class AuthRepository {
     public String randomAccount() {
         return Transaction.start(Xebians.queryAll())
                 .map(Stream::findFirst)
-                .map(optionalXebian -> optionalXebian.orElseGet(() -> Xebians.create("john@xebia.fr").andThen(Xebians.fromNode).apply(databaseProvider.get())))
+                .flatMap(db -> getOptionalOr(() -> Xebians.create("john@xebia.fr").andThen(Xebians.fromNode).apply(db)))
                 .run(databaseProvider)
                 .getEmail();
     }

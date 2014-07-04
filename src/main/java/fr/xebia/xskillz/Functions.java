@@ -24,7 +24,7 @@ public abstract class Functions {
     }
 
     public static <T> Stream<T> stream(Iterable<T> iterable) {
-        return StreamSupport.stream(iterable.spliterator(), false);
+        return stream(iterable.spliterator());
     }
 
     public static <T> Function<Stream<T>, Collection<T>> toList() {

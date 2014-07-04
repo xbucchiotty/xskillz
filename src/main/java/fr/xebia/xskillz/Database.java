@@ -7,7 +7,6 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -18,6 +17,7 @@ public abstract class Database {
     private Database() {
 
     }
+
     public static Function<Map<String, Object>, Node> extractNode(String column) {
         return row -> (Node) row.get(column);
     }
@@ -30,7 +30,7 @@ public abstract class Database {
         };
     }
 
-    public static Function<Node, Optional<Relationship>> createRelationFrom(Node from, RelationshipType relationType) {
-        return skillNode -> Optional.of(from.createRelationshipTo(skillNode, relationType));
+    public static Function<Node, Relationship> addRelationshipTo(Node from, RelationshipType relationType) {
+        return skillNode -> from.createRelationshipTo(skillNode, relationType);
     }
 }
